@@ -14,6 +14,9 @@ from ipaddress import ip_network, ip_address
 # Instantiate our FileUploadHandler class
 class FileUploadHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
+        # Overwrite default versions to minimize fingerprinting
+        self.server_version = "nginx"
+        self.sys_version = ""
         self.upload_folder = kwargs.pop('upload_folder', None)
         self.allowed_ip = kwargs.pop('allowed_ip', None)
         self.organize_uploads = kwargs.pop('organize_uploads', False)
