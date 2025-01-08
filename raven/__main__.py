@@ -183,11 +183,11 @@ def generate_epilog():
         "examples:",
         "  Start the HTTP server on all available network interfaces, listening on port 443",
         "  raven 0.0.0.0 443\n",
-        "  Start the HTTP server on a specific interface (192.168.0.12), listening on port 443, and restrict access to 192.168.0.4",
+        "  Bind the HTTP server to a specific address (192.168.0.12), listening on port 443, and restrict access to 192.168.0.4",
         "  raven 192.168.0.12 443 --allowed-ip 192.168.0.4\n",
-        "  Start the HTTP server on a specific interface (192.168.0.12), listening on port 443, restrict access to 192.168.0.4, and save uploaded files to /tmp:",
+        "  Bind the HTTP server to a specific address (192.168.0.12), listening on port 443, restrict access to 192.168.0.4, and save uploaded files to /tmp",
         "  raven 192.168.0.12 443 --allowed-ip 192.168.0.4 --upload-folder /tmp\n",
-        "  Start the HTTP server on a specific interface (192.168.0.12), listening on port 443, restrict access to 192.168.0.4, and save uploaded files to /tmp organized by remote client IP",
+        "  Bind the HTTP server to a specific address (192.168.0.12), listening on port 443, restrict access to 192.168.0.4, and save uploaded files to /tmp organized by remote client IP",
         "  raven 192.168.0.12 443 --allowed-ip 192.168.0.4 --upload-folder /tmp --organize-uploads",
     ]
     return "\n".join(examples)
@@ -197,15 +197,15 @@ def main():
     # Build the parser
     parser = argparse.ArgumentParser(
         description="A lightweight file upload service used for penetration testing and incident response.",
-        usage="raven <listening_ip> <listening_port> [--allowed-ip <allowed_client_ip>] [--upload-folder <upload_directory>] [--organize-uploads]",
+        usage="raven [lhost] [lport] [--allowed-ip <allowed_client_ip>] [--upload-folder <upload_directory>] [--organize-uploads]",
         epilog=generate_epilog(),
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
 
     # Configure our arguments
-    parser.add_argument("host", help="The IP address for our http handler to listen on")
-    parser.add_argument("port", type=int, help="The port for our http handler to listen on")
-    parser.add_argument("--allowed-ip", help="Restrict access to our http handler by IP address (optional)")
+    parser.add_argument("lhost", nargs="?", default="0.0.0.0", help="The IP address for our HTTP handler to listen on (default: listen on all interfaces)")
+    parser.add_argument("lport", nargs="?", type=int, default=8080, help="The port for our HTTP handler to listen on (default: 8080)")
+    parser.add_argument("--allowed-ip", help="Restrict access to our HTTP handler by IP address (optional)")
     parser.add_argument("--upload-folder", default=os.getcwd(), help="Designate the directory to save uploaded files to (default: current working directory)")
     parser.add_argument("--organize-uploads", action="store_true", help="Organize file uploads into subfolders by remote client IP")
 
@@ -213,13 +213,15 @@ def main():
     args = parser.parse_args()
 
     # Check if no arguments were provided
+    '''
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit(1)
+    '''
 
     # Initializing configuration variables
-    host = args.host
-    port = args.port
+    host = args.lhost
+    port = args.lport
     allowed_ip = args.allowed_ip
     upload_folder = args.upload_folder
     organize_uploads = args.organize_uploads
