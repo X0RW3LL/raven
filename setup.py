@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='raven',
-    version='1.0.0',
+    version='1.1.0',
     url='https://github.com/gh0x0st/raven',
     author='Tristram',
     author_email="discord:blueteamer",
@@ -27,6 +27,8 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Operating System :: OS Independent",
         "Intended Audience :: System Administrators",
         "Intended Audience :: Security",
